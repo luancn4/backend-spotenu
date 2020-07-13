@@ -7,7 +7,9 @@ export class User {
     private nickname: string,
     private email: string,
     private password: string,
-    private type: UserType
+    private type: UserType,
+    private description?: string,
+    private approved?: Boolean
   ) {}
 
   public getId(): string {
@@ -30,20 +32,28 @@ export class User {
     return this.password;
   }
 
-  public getRole(): UserType {
+  public getType(): UserType {
     return this.type;
+  }
+
+  public getDescription(): string | undefined{
+    return this.description 
+  }
+
+  public getApproved(): Boolean | undefined{
+    return this.approved
   }
 }
 
 export const stringToUserType = (input: string): UserType => {
   switch (input) {
-    case "NORMAL":
+    case "normal":
       return UserType.NORMAL;
-    case "ADMIN":
+    case "admin":
       return UserType.ADMIN;
-    case "BAND":
+    case "band":
       return UserType.BAND;
-    case "PREMIUM":
+    case "premium":
       return UserType.PREMIUM;
     default:
       throw new InvalidParameterError("Invalid user type");
@@ -51,8 +61,8 @@ export const stringToUserType = (input: string): UserType => {
 };
 
 export enum UserType {
-  NORMAL = "NORMAL",
-  ADMIN = "ADMIN",
-  BAND = "BAND",
-  PREMIUM = "PREMIUM"
+  NORMAL = "normal",
+  ADMIN = "admin",
+  BAND = "band",
+  PREMIUM = "premium"
 }

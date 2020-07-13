@@ -19,8 +19,28 @@ export class UserController {
         req.body.name,
         req.body.nickname,
         req.body.email,
-        req.body.password,
+        req.body.password
       );
+      res.status(200).send(result);
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+    }
+  }
+
+  async adminSignup(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization as string;
+
+      const result = await UserController.UserBusiness.adminSignup(
+        token,
+        req.body.name,
+        req.body.nickname,
+        req.body.email,
+        req.body.password
+      );
+
       res.status(200).send(result);
     } catch (err) {
       res.status(400).send({

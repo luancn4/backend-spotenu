@@ -48,4 +48,44 @@ export class UserBusiness {
 
     return { accessToken };
   }
+
+  async adminSignup(
+    token: string,
+    name: string,
+    nickname: string,
+    email: string,
+    password: string
+  ) {
+    const auth = this.tokenGenerator.verify(token);
+    if (auth.type !== "admin") {
+      return new UnauthorizedError("You are not an administrator");
+    }
+
+    if (!name || !nickname || !email || !password) {
+      return new InvalidParameterError("Missing inputs");
+    }
+
+    if (email.indexOf("@") === -1) {
+      throw new Error("Invalid email");
+    }
+
+    if (password.length < 10) {
+      throw new Error("Password must have at least 10 characters");
+    }
+
+    const id = this.idGenerator.generate();
+    const cryptedPassword = await this.hashGenerator.hash(password);
+    const type = UserType.ADMIN;
+
+    await this.userDatabase.signup(
+      new User(id, name, nickname, email, cryptedPassword, type)
+    );
+
+    const accessToken = this.tokenGenerator.generate({
+      id,
+      type,
+    });
+
+    return { accessToken };
+  }
 }
