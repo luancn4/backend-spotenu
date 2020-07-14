@@ -3,6 +3,7 @@ import { User } from "../model/User";
 
 export class BandDatabase extends BaseDataBase {
   protected tableName: string = "SpotUsers";
+  protected genreTable: string = "Genre";
 
   async getAllBands(): Promise<any> {
     const res = await super.getConnection().raw(`
@@ -19,9 +20,9 @@ export class BandDatabase extends BaseDataBase {
       SELECT *
       FROM ${this.tableName}
       WHERE id = '${id}'
-    `)
+    `);
 
-    return res[0][0]
+    return res[0][0];
   }
 
   async approveBand(id: string): Promise<any> {
@@ -29,6 +30,16 @@ export class BandDatabase extends BaseDataBase {
     UPDATE ${this.tableName}
     SET approved = 1
     WHERE id = '${id}'
-    `)
+    `);
+  }
+
+  async createGenre(genre: string, id: string) {
+    await super
+      .getConnection()
+      .insert({
+        id,
+        genre,
+      })
+      .into(this.genreTable);
   }
 }

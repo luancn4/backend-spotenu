@@ -1,6 +1,8 @@
 import { TokenGenerator } from "../services/tokenGenerator";
+import { IdGenerator } from "../services/idGenerator";
 import { BandDatabase } from "../data/BandDatabase";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { GenericError } from "../errors/GenericError";
 
 export class BandBusiness {
   constructor(
@@ -27,7 +29,7 @@ export class BandBusiness {
     }
 
     const band = await this.bandDatabase.getBandById(id);
-    
+
     if (band.type !== "band") {
       throw new Error("This user has no type 'band'");
     }
@@ -36,5 +38,20 @@ export class BandBusiness {
     }
 
     await this.bandDatabase.approveBand(id);
+  }
+
+  async createGenre(token: string, genre: string): Promise<any> {
+    const auth = this.tokenGenerator.verify(token);
+
+    if (auth.type !== "admin") {
+      throw new UnauthorizedError("You are not an administrator");
+    }
+
+    if (!genre) {
+      throw new GenericError("Invalid input");
+    }
+
+    const id = new IdGenerator().generate();
+    await this.bandDatabase.createGenre(genre.toUpperCase(), id);
   }
 }

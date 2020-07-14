@@ -3,17 +3,15 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export class TokenGenerator {
-  private static expiresIn: number = 1200;
-
   public generate = (input: AuthenticationData): string => {
     const newToken = jwt.sign(
       {
         id: input.id,
-        type: input.type
+        type: input.type,
       },
       process.env.JWT_KEY as string,
       {
-        expiresIn: TokenGenerator.expiresIn,
+        expiresIn: "1y",
       }
     );
     return newToken;
@@ -28,5 +26,5 @@ export class TokenGenerator {
 
 export interface AuthenticationData {
   id: string;
-  type: string
+  type: string;
 }

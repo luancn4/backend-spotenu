@@ -74,13 +74,13 @@ export class UserController {
       const accessToken = await UserController.UserBusiness.login(
         req.body.emailOrNick,
         req.body.password
-      )
+      );
 
-      res.status(200).send(accessToken)
+      res.status(200).send(accessToken);
     } catch (err) {
       res.status(400).send({
-        message: err.message
-      })
+        message: err.message,
+      });
     }
   }
 }

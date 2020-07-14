@@ -25,17 +25,32 @@ export class BandController {
 
   async approveBand(req: Request, res: Response) {
     try {
-      const token = req.headers.authorization as string
-      await BandController.BandBusiness.approveBand(token , req.body.id)
+      const token = req.headers.authorization as string;
+      await BandController.BandBusiness.approveBand(token, req.body.id);
 
       res.status(200).send({
-        message: "Band approved"
-      })
+        message: "Band approved",
+      });
     } catch (err) {
       res.status(400).send({
-        message: err.message
-      })
+        message: err.message,
+      });
     }
   }
-  
+
+  async createGenre(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization as string;
+
+      await BandController.BandBusiness.createGenre(token, req.body.genre);
+
+      res.status(200).send({
+        message: "Genre successfully created",
+      });
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+    }
+  }
 }
