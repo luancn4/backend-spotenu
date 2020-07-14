@@ -3,7 +3,6 @@ import { User, UserType } from "../model/User";
 import { IdGenerator } from "../services/idGenerator";
 import { HashGenerator } from "../services/hashGenerator";
 import { TokenGenerator } from "../services/tokenGenerator";
-import { NotFoundError } from "../errors/NotFoundError";
 import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { GenericError } from "../errors/GenericError";
