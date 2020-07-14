@@ -117,4 +117,32 @@ export class UserBusiness {
       new User(id, name, nickname, email, cryptedPassword, type, description)
     );
   }
+
+  async login(emailOrNickname: string, password: string) {
+    if (!emailOrNickname || !password) {
+      throw new InvalidParameterError("Missing inputs");
+    }
+
+    const user = await this.userDatabase.login(emailOrNickname);
+
+    if (!user) {
+      throw new GenericError("Wrong email or password");
+    }
+
+    const decryptedPassword = await this.hashGenerator.compareHash(
+      password,
+      user.password
+    );
+
+    if (!decryptedPassword) {
+      throw new GenericError("Wrong email or password");
+    }
+
+    const accessToken = this.tokenGenerator.generate({
+      id: user.id,
+      type: user.type,
+    });
+
+    return { accessToken };
+  }
 }

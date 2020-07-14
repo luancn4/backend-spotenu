@@ -18,4 +18,15 @@ export class UserDatabase extends BaseDataBase {
       })
       .into(this.tableName);
   }
+
+  async login(emailOrNick: string) {
+    const user = await super.getConnection().raw(`
+      SELECT *
+      FROM ${this.tableName}
+      WHERE email = '${emailOrNick}'
+      OR
+      nickname = '${emailOrNick}'
+    `);
+    return user[0][0];
+  }
 }
