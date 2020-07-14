@@ -48,4 +48,24 @@ export class UserController {
       });
     }
   }
+
+  async bandSignup(req: Request, res: Response) {
+    try {
+      await UserController.UserBusiness.bandSignup(
+        req.body.name,
+        req.body.nickname,
+        req.body.email,
+        req.body.description,
+        req.body.password
+      );
+
+      res.status(200).send({
+        message: "Band successfully created, wait for aprovation",
+      });
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+    }
+  }
 }
