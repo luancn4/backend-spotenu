@@ -13,4 +13,22 @@ export class BandDatabase extends BaseDataBase {
 
     return res[0];
   }
+
+  async getBandById(id: string): Promise<any> {
+    const res = await super.getConnection().raw(`
+      SELECT *
+      FROM ${this.tableName}
+      WHERE id = '${id}'
+    `)
+
+    return res[0][0]
+  }
+
+  async approveBand(id: string): Promise<any> {
+    await super.getConnection().raw(`
+    UPDATE ${this.tableName}
+    SET approved = 1
+    WHERE id = '${id}'
+    `)
+  }
 }

@@ -22,4 +22,20 @@ export class BandController {
       });
     }
   }
+
+  async approveBand(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization as string
+      await BandController.BandBusiness.approveBand(token , req.body.id)
+
+      res.status(200).send({
+        message: "Band approved"
+      })
+    } catch (err) {
+      res.status(400).send({
+        message: err.message
+      })
+    }
+  }
+  
 }

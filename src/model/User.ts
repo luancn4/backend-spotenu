@@ -58,7 +58,7 @@ export const stringToUserType = (input: string): UserType => {
     default:
       throw new InvalidParameterError("Invalid user type");
   }
-};
+}; // useless?
 
 export enum UserType {
   NORMAL = "normal",
