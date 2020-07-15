@@ -53,4 +53,18 @@ export class BandController {
       });
     }
   }
+
+  async getAllGenres(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization as string;
+
+      const genres = await BandController.BandBusiness.getAllGenres(token);
+
+      res.status(200).send(genres);
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+    }
+  }
 }

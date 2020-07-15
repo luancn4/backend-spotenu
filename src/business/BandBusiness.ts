@@ -54,4 +54,15 @@ export class BandBusiness {
     const id = new IdGenerator().generate();
     await this.bandDatabase.createGenre(genre.toUpperCase(), id);
   }
+
+  async getAllGenres(token: string): Promise<any> {
+    const auth = this.tokenGenerator.verify(token);
+
+    if (auth.type === "admin" || auth.type === "band") {
+      const genres = await this.bandDatabase.getAllGenres();
+      return { genres };
+    } else {
+      throw new UnauthorizedError("Insufficient permission");
+    }
+  }
 }

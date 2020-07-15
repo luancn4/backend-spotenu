@@ -42,4 +42,13 @@ export class BandDatabase extends BaseDataBase {
       })
       .into(this.genreTable);
   }
+
+  async getAllGenres() {
+    const genres = await super.getConnection().raw(`
+      SELECT id, genre
+      FROM ${this.genreTable}
+    `)
+
+    return genres[0]
+  }
 }
