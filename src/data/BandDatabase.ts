@@ -4,6 +4,8 @@ import { GenericError } from "../errors/GenericError";
 export class BandDatabase extends BaseDataBase {
   protected tableName: string = "SpotUsers";
   protected genreTable: string = "SpotGenre";
+  protected albumTable: string = "SpotAlbums";
+  protected albumGenreTable: string = "SpotAlbumsGenre";
 
   async getAllBands(): Promise<any> {
     try {
@@ -68,7 +70,56 @@ export class BandDatabase extends BaseDataBase {
 
       return genres[0];
     } catch (err) {
-      console.error(err);
+      throw new Error(err.message);
+    }
+  }
+
+  async checkGenres(genres: string[]) {
+    let count = 0;
+    for (const genre of genres) {
+      const check = await super.getConnection().raw(`
+        SELECT * 
+        FROM ${this.genreTable}
+        WHERE genre = '${genre}'
+      `);
+
+      if (check[0][0]) {
+        count += 1;
+      }
+    }
+
+    if (genres.length === count) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async createAlbum(id: string, name: string, band: string, genres: string[]) {
+    try {
+      if (!(await this.checkGenres(genres))) {
+        throw new Error("Invalid genre");
+      }
+      await super
+        .getConnection()
+        .insert({
+          id,
+          name,
+          band,
+        })
+        .into(this.albumTable);
+
+      for (const genre of genres) {
+        await super
+          .getConnection()
+          .insert({
+            album: name,
+            genre: genre.toUpperCase(),
+          })
+          .into(this.albumGenreTable);
+      }
+    } catch (err) {
+      throw new Error("Failed to create an album");
     }
   }
 }

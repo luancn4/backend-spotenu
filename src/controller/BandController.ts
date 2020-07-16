@@ -67,4 +67,24 @@ export class BandController {
       });
     }
   }
+
+  async createAlbum(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization as string;
+
+      await BandController.BandBusiness.createAlbum(
+        token,
+        req.body.name,
+        req.body.genres
+      );
+
+      res.status(200).send({
+        message: "Album successfully created",
+      });
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+    }
+  }
 }
