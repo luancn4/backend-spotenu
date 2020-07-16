@@ -1,5 +1,3 @@
-import { InvalidParameterError } from "../errors/InvalidParameterError";
-
 export class User {
   constructor(
     private id: string,
@@ -21,7 +19,7 @@ export class User {
   }
 
   public getNickname(): string {
-    return this.nickname
+    return this.nickname;
   }
 
   public getEmail(): string {
@@ -36,33 +34,18 @@ export class User {
     return this.type;
   }
 
-  public getDescription(): string | undefined{
-    return this.description 
+  public getDescription(): string | undefined {
+    return this.description;
   }
 
-  public getApproved(): Boolean | undefined{
-    return this.approved
+  public getApproved(): Boolean | undefined {
+    return this.approved;
   }
 }
-
-export const stringToUserType = (input: string): UserType => {
-  switch (input) {
-    case "normal":
-      return UserType.NORMAL;
-    case "admin":
-      return UserType.ADMIN;
-    case "band":
-      return UserType.BAND;
-    case "premium":
-      return UserType.PREMIUM;
-    default:
-      throw new InvalidParameterError("Invalid user type");
-  }
-}; // useless?
 
 export enum UserType {
   NORMAL = "normal",
   ADMIN = "admin",
   BAND = "band",
-  PREMIUM = "premium"
+  PREMIUM = "premium",
 }
