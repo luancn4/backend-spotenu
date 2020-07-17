@@ -1,12 +1,13 @@
-import { InvalidParameterError } from "../errors/InvalidParameterError";
-
 export class User {
   constructor(
     private id: string,
     private name: string,
+    private nickname: string,
     private email: string,
     private password: string,
-    private role: UserRole
+    private type: UserType,
+    private description?: string,
+    private approved?: Boolean
   ) {}
 
   public getId(): string {
@@ -17,6 +18,10 @@ export class User {
     return this.name;
   }
 
+  public getNickname(): string {
+    return this.nickname;
+  }
+
   public getEmail(): string {
     return this.email;
   }
@@ -25,23 +30,22 @@ export class User {
     return this.password;
   }
 
-  public getRole(): UserRole {
-    return this.role;
+  public getType(): UserType {
+    return this.type;
+  }
+
+  public getDescription(): string | undefined {
+    return this.description;
+  }
+
+  public getApproved(): Boolean | undefined {
+    return this.approved;
   }
 }
 
-export const stringToUserRole = (input: string): UserRole => {
-  switch (input) {
-    case "NORMAL":
-      return UserRole.NORMAL;
-    case "ADMIN":
-      return UserRole.ADMIN;
-    default:
-      throw new InvalidParameterError("Invalid user role");
-  }
-};
-
-export enum UserRole {
-  NORMAL = "NORMAL",
-  ADMIN = "ADMIN",
+export enum UserType {
+  NORMAL = "normal",
+  ADMIN = "admin",
+  BAND = "band",
+  PREMIUM = "premium",
 }
