@@ -129,6 +129,10 @@ export class UserBusiness {
       throw new GenericError("Wrong email or password");
     }
 
+    if (user.type === "band" && !user.approved) {
+      throw new UnauthorizedError("You were not approved yet");
+    }
+
     const decryptedPassword = await this.hashGenerator.compareHash(
       password,
       user.password
