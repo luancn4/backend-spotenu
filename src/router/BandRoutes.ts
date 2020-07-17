@@ -8,5 +8,6 @@ bandRouter.post("/approve", new BandController().approveBand);
 bandRouter.get("/genres", new BandController().getAllGenres);
 bandRouter.post("/genre/create", new BandController().createGenre);
 bandRouter.post("/album/create", new BandController().createAlbum);
+bandRouter.post("/music/create", new BandController().createMusic);
 
 

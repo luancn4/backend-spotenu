@@ -6,6 +6,7 @@ export class BandDatabase extends BaseDataBase {
   protected genreTable: string = "SpotGenre";
   protected albumTable: string = "SpotAlbums";
   protected albumGenreTable: string = "SpotAlbumsGenre";
+  protected musicsTable: string = "SpotMusics";
 
   async getAllBands(): Promise<any> {
     try {
@@ -74,7 +75,7 @@ export class BandDatabase extends BaseDataBase {
     }
   }
 
-  async checkGenres(genres: string[]) {
+  async checkGenres(genres: string[]): Promise<boolean> {
     let count = 0;
     for (const genre of genres) {
       const check = await super.getConnection().raw(`
@@ -95,7 +96,12 @@ export class BandDatabase extends BaseDataBase {
     return false;
   }
 
-  async createAlbum(id: string, name: string, band: string, genres: string[]) {
+  async createAlbum(
+    id: string,
+    name: string,
+    band: string,
+    genres: string[]
+  ): Promise<void> {
     try {
       if (!(await this.checkGenres(genres))) {
         throw new Error("Invalid genre");
@@ -120,6 +126,37 @@ export class BandDatabase extends BaseDataBase {
       }
     } catch (err) {
       throw new Error("Failed to create an album");
+    }
+  }
+
+  async checkMusic(music: string, album: string): Promise<boolean> {
+    const check = await super.getConnection().raw(`
+      SELECT *
+      FROM ${this.musicsTable}
+      WHERE music = '${music}'
+      AND
+      album = '${album}'
+    `)
+
+    if(check[0][0]){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  async createMusic(id: string, music: string, album: string): Promise<void> {
+    try {
+      await super
+        .getConnection()
+        .insert({
+          id,
+          music,
+          album,
+        })
+        .into(this.musicsTable);
+    } catch (err) {
+      throw new Error("Failed to create a music: " + err.message);
     }
   }
 }

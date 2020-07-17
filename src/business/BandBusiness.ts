@@ -2,8 +2,6 @@ import { TokenGenerator } from "../services/tokenGenerator";
 import { IdGenerator } from "../services/idGenerator";
 import { BandDatabase } from "../data/BandDatabase";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
-import { GenericError } from "../errors/GenericError";
-import { InvalidEmailError } from "../errors/InvalidEmailError";
 import { InvalidParameterError } from "../errors/InvalidParameterError";
 
 export class BandBusiness {
@@ -92,5 +90,29 @@ export class BandBusiness {
     const id = new IdGenerator().generate();
 
     await this.bandDatabase.createAlbum(id, name, auth.id, genres);
+  }
+
+  async createMusic(token: string, name: string, album: string): Promise<void> {
+    const auth = this.tokenGenerator.verify(token);
+    const band = await this.bandDatabase.getBandById(auth.id);
+    const id = new IdGenerator().generate();
+    const checkMusic = await this.bandDatabase.checkMusic(name, album);
+
+    if (!name || !album) {
+      throw new InvalidParameterError("Missing inputs");
+    }
+
+    if (auth.type !== "band") {
+      throw new UnauthorizedError("You are not a band");
+    }
+
+    if (!band.approved) {
+      throw new UnauthorizedError("You were not approved yet");
+    }
+
+    if (checkMusic) {
+      throw new Error("Duplicated music");
+    }
+    await this.bandDatabase.createMusic(id, name, album);
   }
 }
