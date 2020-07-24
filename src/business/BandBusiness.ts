@@ -115,4 +115,16 @@ export class BandBusiness {
     }
     await this.bandDatabase.createMusic(id, name, album);
   }
+
+  async getBandAlbums(token: string): Promise<any> {
+    const auth = this.tokenGenerator.verify(token);
+
+    if (auth.type !== "band") {
+      throw new UnauthorizedError("You are not a band");
+    }
+
+    const albums = await this.bandDatabase.getBandAlbums(auth.id);
+
+    return { albums };
+  }
 }
