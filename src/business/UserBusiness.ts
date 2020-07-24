@@ -38,7 +38,7 @@ export class UserBusiness {
     const cryptedPassword = await this.hashGenerator.hash(password);
     const type = UserType.NORMAL;
 
-    await this.userDatabase.signup(
+    const s = await this.userDatabase.signup(
       new User(id, name, nickname, email, cryptedPassword, type)
     );
 
@@ -47,7 +47,11 @@ export class UserBusiness {
       type,
     });
 
-    return { accessToken };
+    if (s) {
+      return { accessToken };
+    } else {
+      throw new Error("Error");
+    }
   }
 
   async adminSignup(

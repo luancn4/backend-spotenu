@@ -18,6 +18,8 @@ export class UserDatabase extends BaseDataBase {
           description: user.getDescription(),
         })
         .into(this.tableName);
+
+        return true
     } catch (err) {
       console.error(err);
     }

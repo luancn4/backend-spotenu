@@ -1,6 +1,4 @@
 import * as jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
 
 export class TokenGenerator {
   public generate = (input: AuthenticationData): string => {
