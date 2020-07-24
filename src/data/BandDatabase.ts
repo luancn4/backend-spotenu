@@ -11,7 +11,7 @@ export class BandDatabase extends BaseDataBase {
   async getAllBands(): Promise<any> {
     try {
       const res = await super.getConnection().raw(`
-        SELECT name, email, nickname, approved
+        SELECT id, name, email, nickname, approved
         FROM ${this.tableName}
         WHERE type = 'band'
     `);
