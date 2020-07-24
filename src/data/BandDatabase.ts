@@ -11,7 +11,7 @@ export class BandDatabase extends BaseDataBase {
   async getAllBands(): Promise<any> {
     try {
       const res = await super.getConnection().raw(`
-        SELECT name, email, nickname, approved
+        SELECT id, name, email, nickname, approved
         FROM ${this.tableName}
         WHERE type = 'band'
     `);
@@ -136,12 +136,12 @@ export class BandDatabase extends BaseDataBase {
       WHERE music = '${music}'
       AND
       album = '${album}'
-    `)
+    `);
 
-    if(check[0][0]){
-      return true
+    if (check[0][0]) {
+      return true;
     } else {
-      return false
+      return false;
     }
   }
 
@@ -157,6 +157,20 @@ export class BandDatabase extends BaseDataBase {
         .into(this.musicsTable);
     } catch (err) {
       throw new Error("Failed to create a music: " + err.message);
+    }
+  }
+
+  async getBandAlbums(bandId: string): Promise<any> {
+    try {
+      const res = await super.getConnection().raw(`
+        SELECT name
+        FROM ${this.albumTable}
+        WHERE band = '${bandId}'
+      `)
+
+      return res[0]
+    } catch (err) {
+      throw new Error("Failed to get albums");
     }
   }
 }

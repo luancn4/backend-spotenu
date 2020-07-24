@@ -107,4 +107,18 @@ export class BandController {
       });
     }
   }
+
+  async getBandAlbums(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization as string;
+
+      const albums = await BandController.BandBusiness.getBandAlbums(token);
+
+      res.status(200).send(albums);
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+    }
+  }
 }
