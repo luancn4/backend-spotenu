@@ -5,7 +5,7 @@ import { userRouter } from "./router/UserRouter";
 import { bandRouter } from "./router/BandRoutes";
 import cors from "cors";
 
-// dotenv.config()
+dotenv.config()
 
 export const app = express();
 

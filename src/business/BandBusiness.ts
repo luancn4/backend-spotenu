@@ -33,6 +33,7 @@ export class BandBusiness {
     if (band.type !== "band") {
       throw new Error("This user has no type 'band'");
     }
+    
     if (band.approved) {
       throw new Error("Band was already approved");
     }

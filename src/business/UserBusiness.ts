@@ -133,10 +133,6 @@ export class UserBusiness {
       throw new GenericError("Wrong email or password");
     }
 
-    if (user.type === "band" && !user.approved) {
-      throw new UnauthorizedError("You were not approved yet");
-    }
-
     const decryptedPassword = await this.hashGenerator.compareHash(
       password,
       user.password
@@ -151,6 +147,14 @@ export class UserBusiness {
       type: user.type,
     });
 
-    return { accessToken };
+    return {
+      accessToken: accessToken,
+      user: {
+        name: user.name,
+        type: user.type,
+        approved: user.approved,
+        description: user.description,
+      },
+    };
   }
 }
