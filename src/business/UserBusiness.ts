@@ -157,4 +157,28 @@ export class UserBusiness {
       },
     };
   }
+
+  async getInfoById(token: string) {
+    const auth = this.tokenGenerator.verify(token);
+
+    if (!token || !auth.id) {
+      throw new GenericError("JWT / ID is missing");
+    }
+
+    const userInfo = await this.userDatabase.getInfoById(auth.id);
+
+    return { userInfo };
+  }
+
+  async getMusicByName(token: string, music: string) {
+    const auth = this.tokenGenerator.verify(token);
+
+    if (!token || !auth.id) {
+      throw new GenericError("JWT / ID is missing");
+    }
+
+    const musics = await this.userDatabase.getMusicByName(music);
+
+    return { musics };
+  }
 }

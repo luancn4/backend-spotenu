@@ -19,7 +19,7 @@ export class UserDatabase extends BaseDataBase {
         })
         .into(this.tableName);
 
-        return true
+      return true;
     } catch (err) {
       console.error(err);
     }
@@ -38,5 +38,25 @@ export class UserDatabase extends BaseDataBase {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  async getInfoById(id: string) {
+    const user = await super.getConnection().raw(`
+      SELECT name, nickname, email, type, description, approved
+      FROM ${this.tableName}
+      WHERE id = '${id}'
+    `);
+
+    return user[0][0];
+  }
+
+  async getMusicByName(name: string) {
+    const music = await super.getConnection().raw(`
+      SELECT *
+      FROM SpotMusics
+      WHERE music LIKE "${name}%"
+    `)
+
+    return music[0]
   }
 }
