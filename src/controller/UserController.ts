@@ -83,4 +83,33 @@ export class UserController {
       });
     }
   }
+
+  async getInfoById(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization as string;
+
+      const userInfo = await UserController.UserBusiness.getInfoById(token)
+
+      res.status(200).send(userInfo)
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+    }
+  }
+
+  async getMusicByName(req: Request, res: Response) {
+    try {
+      const token = req.headers.authorization as string;
+     
+
+      const music = await UserController.UserBusiness.getMusicByName(token, req.query.music as string)
+
+      res.status(200).send(music)
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+    }
+  }
 }
